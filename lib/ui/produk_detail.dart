@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tokokita/bloc/produk_bloc.dart';
 import 'package:tokokita/model/produk.dart';
 import 'package:tokokita/ui/produk_form.dart';
 import 'package:tokokita/ui/produk_page.dart';
+import 'package:tokokita/ui/produk_bloc.dart';
+import 'package:tokokita/widget/warning_dialog.dart';
 
 // ignore: must_be_immutable
 class ProdukDetail extends StatefulWidget {
@@ -18,11 +19,10 @@ class _ProdukDetailState extends State<ProdukDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detail Produk'),
+        title: const Text('Detail Produk Fauzia'),
       ),
       body: Center(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               "Kode : ${widget.produk!.kodeProduk}",
@@ -62,7 +62,9 @@ class _ProdukDetailState extends State<ProdukDetail> {
             );
           },
         ),
+
         const SizedBox(width: 10),
+
         // Tombol Hapus
         OutlinedButton(
           child: const Text("DELETE"),
@@ -76,36 +78,33 @@ class _ProdukDetailState extends State<ProdukDetail> {
     AlertDialog alertDialog = AlertDialog(
       content: const Text("Yakin ingin menghapus data ini?"),
       actions: [
-        // Tombol hapus
+        // tombol hapus
         OutlinedButton(
           child: const Text("Ya"),
           onPressed: () {
-            ProdukBloc.deleteProduk(id: widget.produk!.id!).then(
-              (_) {
+            ProdukBloc.deleteProduk(
+              id: int.parse(widget.produk!.id!),
+            ).then(
+              (value) {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const ProdukPage()),
+                  MaterialPageRoute(
+                    builder: (context) => const ProdukPage(),
+                  ),
                 );
               },
-            ).catchError((error) {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text("Warning"),
-                    content: const Text("Hapus gagal, silahkan coba lagi"),
-                    actions: [
-                      TextButton(
-                        child: const Text("OK"),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                    ],
-                  );
-                },
-              );
-            });
+              onError: (error) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => const WarningDialog(
+                    description: "Hapus gagal, silahkan coba lagi",
+                  ),
+                );
+              },
+            );
           },
         ),
-        // Tombol batal
+
+        // tombol batal
         OutlinedButton(
           child: const Text("Batal"),
           onPressed: () => Navigator.pop(context),
