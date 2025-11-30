@@ -40,8 +40,8 @@ Shift Baru: F
 
 2. Proses registrasi di **Registrasi Page (`registrasi_page.dart`)**
    <p align="center">
-     <img src="" width="360" style="display:inline-block; margin-right:10px;" />
-     <img src="" width="360" style="display:inline-block;" />
+     <img src="https://github.com/user-attachments/assets/22d65577-88ea-485f-b43a-fee8c2aed1c8" width="360" style="display:inline-block; margin-right:10px;" />
+     <img src="https://github.com/user-attachments/assets/76cb19bc-0d21-429c-80c5-919239770cdf" width="360" style="display:inline-block;" />
    </p>
 
    - State dan Controller digunakan untuk validasi dan membaca input user:
@@ -187,6 +187,11 @@ Shift Baru: F
 ---
 
 3. Proses Login di **Login Page (`login_page.dart`)**
+      <p align="center">
+        <img src="https://github.com/user-attachments/assets/4988191b-ac0a-42ab-97c5-cdf60dbacc64" width="360" style="display:inline-block; margin-right:10px;" />
+        <img src="https://github.com/user-attachments/assets/2dcf9da6-6f03-46d9-8d5b-711cb50c97cb" width="360" style="display:inline-block;" />
+      </p>
+      
    - Halaman ini digunakan untuk login ke dalam aplikasi
    - State dan Controller digunakan untuk validasi dan membaca input user:
      ```dart
@@ -267,6 +272,10 @@ Shift Baru: F
 ---
 
 4. Setelah login berhasil, user akan diarahkan ke **Produk Page (`produk_page.dart`)**
+      <p align="center">
+        <img src="https://github.com/user-attachments/assets/2dcf9da6-6f03-46d9-8d5b-711cb50c97cb" width="360" style="display:inline-block; margin-right:10px;" />
+      </p>
+
    - Halaman untuk menampilkan daftar produk
    - Di bagian samping, tersedia menu Drawer dengan opsi Logout. Ketika user memilih Logout, aplikasi memanggil:
      ```dart
@@ -302,12 +311,20 @@ Shift Baru: F
 ---
 
 5. **Produk Form (`produk_form.dart`)**
+      <p align="center">
+        <img src="https://github.com/user-attachments/assets/1e0e31d7-2f45-4944-b781-c6427eea843c" width="360" style="display:inline-block; margin-right:10px;" />
+        <img src="https://github.com/user-attachments/assets/ea1c6087-0af0-4a56-9ce6-41b6aa8c9cc1" width="360" style="display:inline-block;" />
+      </p>
+
    - Halaman ProdukForm digunakan untuk dua keperluan sekaligus, yaitu menambah produk baru dan mengubah produk yang sudah ada. Ketika halaman pertama kali dibuka, method `initState()` memanggil fungsi `isUpdate()` untuk memastikan apakah halaman sedang digunakan untuk mengubah produk atau membuat produk baru. Jika `widget.produk` berisi data, maka itu berarti pengguna sedang mengedit produk
 
      ```dart
-      _kodeProdukTextboxController.text = widget.produk!.kodeProduk!;
-      _namaProdukTextboxController.text = widget.produk!.namaProduk!;
-      _hargaProdukTextboxController.text = widget.produk!.hargaProduk.toString();
+      @override
+      void initState() {
+        super.initState();
+        isUpdate();
+      }
+      );
      ```
      Namun jika `widget.produk` bernilai null, maka ini adalah mode tambah, sehingga judul tetap "Tambah Produk Fauzia" dan tombol berlabel "Simpan".
      
@@ -330,7 +347,7 @@ Shift Baru: F
           return null;
         }
        ```
-     - Harga Produk tidak boleh kosong dan harus berupa angka
+     - Harga Produk tidak boleh kosong
        ```dart
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -342,74 +359,110 @@ Shift Baru: F
           return null;
         }
        ```
-   - Button Simpan/Ubah
+   - Button Simpan/Ubah menyesuaikan mode form melalui variabel `tombolSubmit`.
      ```dart
       OutlinedButton(
         child: Text(tombolSubmit),
         onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            // proses simpan atau ubah
+          var validate = _formKey.currentState!.validate();
+          if (validate && !_isLoading) {
+            if (widget.produk != null) {
+              ubah();
+            } else {
+              simpan();
+            }
           }
         },
       )
      ```
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/0b97785b-ba97-4769-bfe7-b17af00a31c9" width="360" style="display:inline-block; margin-right:10px;" />
-  <img src="https://github.com/user-attachments/assets/f80e2594-de2c-4748-a58e-e1dae48cb408" width="360" style="display:inline-block;" />
-</p>
+     - Jika form valid dan tidak sedang loading:
+          - Jika widget.produk != null → panggil ubah()
+          - Jika widget.produk == null → panggil simpan()
+       Fungsi `simpan()` dan `ubah()` akan memproses data melalui `ProdukBlo`, dan menampilkan dialog peringatan `(WarningDialog)` jika terjadi error. Jika berhasil, halaman akan kembali ke `ProdukPage`.
 
-     
 ---
 
    
-6.  **Produk Detail (`produk_detail.dart`)**
-     - Menampilkan informasi lengkap produk dengan button edit dan delete
-     - Detail Produk
+6.  Melihat **Produk Detail (`produk_detail.dart`)**
+      <p align="center">
+        <img src="https://github.com/user-attachments/assets/73f2d521-b978-4730-ad7d-01dec37355fc" width="360" style="display:inline-block; margin-right:10px;" />
+        <img src="https://github.com/user-attachments/assets/7aad4dcb-f6e3-43e5-9c35-b158eb0dddcd" width="360" style="display:inline-block;" />
+      </p>
+
+      <p align="center">
+        <img src="https://github.com/user-attachments/assets/982f1aae-7f9f-4cc6-9a30-a49256655f6e" width="360" style="display:inline-block; margin-right:10px;" />
+        <img src="https://github.com/user-attachments/assets/7e17a329-1509-498a-8995-a5ac891c7030" width="360" style="display:inline-block;" />
+      </p>
+
+     - Setelah mengisi form, user akan dikembalikan ke halaman `ProdukPage`. Ketika produk diklik, maka akan diarahkan ke halaman detail produk.
+     - Detail Produk ditampilkan dalam `Column`, berada di tengah halaman menggunakan `Center`.
        ```dart
-        Text("Kode : ${produk.kodeProduk}")
-        Text("Nama : ${produk.namaProduk}")
-        Text("Harga : Rp ${produk.hargaProduk}")
+         Text(
+           "Kode : ${widget.produk!.kodeProduk}",
+           style: const TextStyle(fontSize: 20.0),
+         ),
+         const SizedBox(height: 8.0),
+         Text(
+           "Nama : ${widget.produk!.namaProduk}",
+           style: const TextStyle(fontSize: 18.0),
+         ),
+         const SizedBox(height: 8.0),
+         Text(
+           "Harga : Rp. ${widget.produk!.hargaProduk}",
+           style: const TextStyle(fontSize: 18.0),
+         ),
        ```
-     - Button Edit
+     - Jika mengeklik Button Edit, maka akan mengirim `widget.produk` ke form agar textfield otomatis terisi. `ProdukForm` kemudian mengetahui bahwa ini mode ubah, bukan tambah.
        ```dart
-        OutlinedButton(
-          child: const Text("EDIT"),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProdukForm(produk: widget.produk)),
-            );
-          },
-        )
+         OutlinedButton(
+           child: const Text("EDIT"),
+           onPressed: () {
+             Navigator.push(
+               context,
+               MaterialPageRoute(
+                 builder: (context) => ProdukForm(
+                   produk: widget.produk!,
+                 ),
+               ),
+             );
+           },
+         ),
        ```
-     - Button Delete
+     - Ketika mengeklik Button Delete, akan ditampilkan popup konfirmasi
        ```dart
         OutlinedButton(
           child: const Text("DELETE"),
           onPressed: () => confirmHapus(),
         )
        ```
-     - Popup Konfirmasi Hapus
+     - Popup Konfirmasi Hapus muncul saat tombol Delete ditekan
        ```dart
-        AlertDialog(
-          content: const Text("Yakin ingin menghapus data ini?"),
-          actions: [
-            OutlinedButton(
-              child: const Text("Ya"),
-              onPressed: () {
-                ProdukBloc.deleteProduk(id: int.parse(widget.produk!.id!))
-              },
-            ),
-            OutlinedButton(
-              child: const Text("Batal"),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        )
+         AlertDialog(
+           content: const Text("Yakin ingin menghapus data ini?"),
+           actions: [
+             OutlinedButton(
+               child: const Text("Ya"),
+               onPressed: () {
+                 ProdukBloc.deleteProduk(id: int.parse(widget.produk!.id!)).then(
+                   (value) => Navigator.of(context).push(
+                     MaterialPageRoute(builder: (context) => const ProdukPage()),
+                   ),
+                   onError: (error) {
+                     showDialog(
+                       context: context,
+                       builder: (context) => const WarningDialog(
+                         description: "Hapus gagal, silahkan coba lagi",
+                       ),
+                     );
+                   },
+                 );
+               },
+             ),
+             OutlinedButton(
+               child: const Text("Batal"),
+               onPressed: () => Navigator.pop(context),
+             ),
+           ],
+         )
        ```
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/9ff47c95-5b83-4cf7-ae53-e68228c358e4" width="360"/>
-</p>
-       
-
-
+       Pada dialog konfirmasi hapus, terdapat dua pilihan tombol. Jika pengguna menekan tombol "Ya", aplikasi akan memanggil fungsi `ProdukBloc.deleteProduk()` dengan mengirimkan ID produk yang akan dihapus. Apabila proses penghapusan berhasil, aplikasi secara otomatis akan mengarahkan pengguna kembali ke halaman daftar produk `(ProdukPage`) untuk menampilkan data terbaru. Namun, jika proses tersebut gagal, sistem akan menampilkan sebuah `WarningDialog` sebagai pemberitahuan bahwa penghapusan tidak berhasil dan pengguna diminta untuk mencoba kembali. Sementara itu, jika pengguna memilih tombol "Batal", dialog popup akan langsung ditutup tanpa melakukan tindakan apa pun, dan produk tetap tersimpan seperti sebelumnya.
